@@ -6,7 +6,7 @@
 name: pafili-clean-probe
 on:
   schedule:
-    - cron: "*/30 * * * *"
+    - cron: "*/20 * * * *"
   workflow_dispatch:
 concurrency:
   group: pafili-clean-probe
