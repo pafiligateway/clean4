@@ -1,0 +1,40 @@
+# Installed by the Pafili panel. Reads .pafili/plan.json, fetches the
+# selected country feeds, tests every IP over real TLS with the node SNI
+# from GitHub's network, and publishes the result to the pafili-data
+# branch. The panel only reads that branch: no secret, no callback, no
+# shared clock between the two schedulers.
+name: pafili-clean-probe
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+concurrency:
+  group: pafili-clean-probe
+  cancel-in-progress: false
+permissions:
+  contents: write
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Fetch, test and build the pool
+        env:
+          PAFILI_OUT: ${{ runner.temp }}/clean-pool.json
+        run: node .github/pafili/probe.mjs
+      - name: Publish to the data branch
+        run: |
+          set -euo pipefail
+          git config user.name "pafili-bot"
+          git config user.email "pafili-bot@users.noreply.github.com"
+          git checkout --orphan pafili-data
+          git rm -rf . >/dev/null 2>&1 || true
+          mkdir -p .pafili
+          cp "$RUNNER_TEMP/clean-pool.json" .pafili/clean-pool.json
+          git add -f .pafili/clean-pool.json
+          git commit -m "pafili: tested clean pool"
+          git push --force origin pafili-data
