@@ -1,7 +1,7 @@
 {
   "v": 1,
-  "at": 1793118446710,
-  "sni": "pafili-node-8e8404.pafili-56c800.workers.dev",
+  "at": 1793119057818,
+  "sni": "pafili-node-d92bc8.pafili-b7bd00.workers.dev",
   "ports": [
     443,
     2053,
@@ -31,13 +31,11 @@
       "format": "markdown",
       "max": 20,
       "regions": [
-        "BE",
-        "DK",
-        "IT",
+        "DE",
+        "IN",
+        "NL",
         "RU",
-        "GB",
-        "US",
-        "UZ"
+        "US"
       ],
       "url": "https://raw.githubusercontent.com/NiREvil/vless/main/sub/ProxyIP-Daily.md",
       "maxRisk": 100
